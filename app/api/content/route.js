@@ -1,5 +1,15 @@
 import { corsJson, corsOptions } from "../../lib/cors";
-import { listContent, saveContent } from "../../lib/db";
+import { findUserByToken, listContent, saveContent } from "../../lib/db";
+
+function getBearerToken(request) {
+  const authorization = request.headers.get("authorization") || "";
+
+  if (!authorization.startsWith("Bearer ")) {
+    return "";
+  }
+
+  return authorization.slice("Bearer ".length).trim();
+}
 
 export async function OPTIONS(request) {
   return corsOptions(request);
@@ -17,17 +27,18 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const { text, author } = await request.json();
+    const { text } = await request.json();
+    const user = await findUserByToken(getBearerToken(request));
 
     if (!text || !text.trim()) {
       return corsJson(request, { message: "请输入要保存的内容" }, { status: 400 });
     }
 
-    if (!author || !author.trim()) {
+    if (!user) {
       return corsJson(request, { message: "请先登录再保存" }, { status: 401 });
     }
 
-    const savedContent = await saveContent(text.trim(), author.trim());
+    const savedContent = await saveContent(text.trim(), user.username);
 
     return corsJson(request, { ok: true, content: savedContent });
   } catch (error) {

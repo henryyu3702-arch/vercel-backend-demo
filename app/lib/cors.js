@@ -27,7 +27,7 @@ function getAllowOrigin(request) {
 export function withCors(request, response) {
   response.headers.set("Access-Control-Allow-Origin", getAllowOrigin(request));
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
   response.headers.set("Access-Control-Max-Age", "86400");
 
   return response;

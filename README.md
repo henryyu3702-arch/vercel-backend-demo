@@ -5,7 +5,8 @@
 - 前端登录页，默认用户名/密码都是 `admin`
 - 支持注册新账号，注册成功后自动登录
 - 后端接口 `/api/login` 校验账号密码
-- 登录后可输入内容并保存到数据库 `content` 表，同时记录作者
+- 登录/注册成功后返回登录 token
+- 登录后可输入内容并保存到数据库 `content` 表，后端通过 token 识别作者
 - `/contents` 页面展示所有保存过的内容和作者
 - 本地开发默认使用 SQLite 文件 `demo.db`
 - 部署到 Vercel 后，如果绑定 Vercel Postgres，会自动使用 Postgres
@@ -50,6 +51,14 @@ vercel --prod
 - `content` 表，用来保存输入内容
 
 保存内容时会自动记录作者字段 `author`。如果旧表没有 `author` 字段，程序会自动补充该字段。
+
+登录 token 会保存到数据库的 `auth_tokens` 表。保存内容时，前端需要在请求头里携带：
+
+```text
+Authorization: Bearer <token>
+```
+
+后端会根据 token 查询当前用户，并把该用户作为内容作者，避免直接相信前端传来的作者名。
 
 Vercel 线上推荐添加 Vercel Postgres：
 

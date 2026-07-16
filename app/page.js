@@ -9,6 +9,7 @@ export default function Home() {
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("admin");
   const [currentUser, setCurrentUser] = useState("");
+  const [authToken, setAuthToken] = useState("");
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,7 @@ export default function Home() {
 
     setIsLoggedIn(true);
     setCurrentUser(data.username);
+    setAuthToken(data.token);
     setMessage(mode === "login" ? "登录成功，可以输入内容并保存了。" : "注册成功，已自动登录。");
   }
 
@@ -44,8 +46,11 @@ export default function Home() {
 
     const response = await fetch("/api/content", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: content, author: currentUser })
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ text: content })
     });
     const data = await response.json();
 

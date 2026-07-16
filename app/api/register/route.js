@@ -1,5 +1,5 @@
 import { corsJson, corsOptions } from "../../lib/cors";
-import { createUser } from "../../lib/db";
+import { createAuthToken, createUser } from "../../lib/db";
 
 export async function OPTIONS(request) {
   return corsOptions(request);
@@ -20,7 +20,9 @@ export async function POST(request) {
       return corsJson(request, { message: "账号已存在，请换一个账号" }, { status: 409 });
     }
 
-    return corsJson(request, { ok: true, username: user.username });
+    const token = await createAuthToken(user.username);
+
+    return corsJson(request, { ok: true, username: user.username, token });
   } catch (error) {
     return corsJson(request, { message: error.message || "注册接口异常" }, { status: 500 });
   }

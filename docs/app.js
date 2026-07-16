@@ -2,6 +2,7 @@ const API_BASE_URL = "https://vercel-backend-demo-fx1cd0uka-henryyu3702-archs-pr
 
 let mode = "login";
 let currentUser = "";
+let authToken = "";
 
 const title = document.querySelector("#title");
 const loginTab = document.querySelector("#login-tab");
@@ -70,6 +71,7 @@ async function handleAuth(event) {
     });
 
     currentUser = data.username;
+    authToken = data.token;
     currentUserText.textContent = currentUser;
     authArea.classList.add("hidden");
     contentArea.classList.remove("hidden");
@@ -87,9 +89,11 @@ async function handleSave(event) {
   try {
     const data = await requestJson("/api/content", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      },
       body: JSON.stringify({
-        text: contentInput.value,
-        author: currentUser
+        text: contentInput.value
       })
     });
 

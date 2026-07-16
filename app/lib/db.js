@@ -6,6 +6,11 @@ const databaseUrl =
 const isVercelPostgresAvailable = Boolean(databaseUrl);
 const memoryUsers = [{ username: "admin", password: "admin" }];
 const memoryContent = [];
+const memoryTokens = [];
+
+function createTokenValue() {
+  return `${Date.now().toString(36)}-${crypto.randomUUID()}`;
+}
 
 async function getSql() {
   if (!process.env.POSTGRES_URL && databaseUrl) {
@@ -35,6 +40,16 @@ async function ensureUsersTable(sql) {
     INSERT INTO users (username, password)
     VALUES ('admin', 'admin')
     ON CONFLICT (username) DO NOTHING
+  `;
+}
+
+async function ensureAuthTokensTable(sql) {
+  await sql`
+    CREATE TABLE IF NOT EXISTS auth_tokens (
+      token TEXT PRIMARY KEY,
+      username TEXT NOT NULL REFERENCES users(username) ON DELETE CASCADE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
   `;
 }
 
@@ -73,6 +88,49 @@ export async function createUser(username, password) {
     VALUES (${username}, ${password})
     ON CONFLICT (username) DO NOTHING
     RETURNING username
+  `;
+
+  return rows[0] ?? null;
+}
+
+export async function createAuthToken(username) {
+  const token = createTokenValue();
+
+  if (!isVercelPostgresAvailable) {
+    memoryTokens.push({ token, username, created_at: new Date().toISOString() });
+    return token;
+  }
+
+  const sql = await getSql();
+  await ensureUsersTable(sql);
+  await ensureAuthTokensTable(sql);
+
+  await sql`
+    INSERT INTO auth_tokens (token, username)
+    VALUES (${token}, ${username})
+  `;
+
+  return token;
+}
+
+export async function findUserByToken(token) {
+  if (!token) {
+    return null;
+  }
+
+  if (!isVercelPostgresAvailable) {
+    const authToken = memoryTokens.find((memoryToken) => memoryToken.token === token);
+    return authToken ? { username: authToken.username } : null;
+  }
+
+  const sql = await getSql();
+  await ensureUsersTable(sql);
+  await ensureAuthTokensTable(sql);
+
+  const { rows } = await sql`
+    SELECT username FROM auth_tokens
+    WHERE token = ${token}
+    LIMIT 1
   `;
 
   return rows[0] ?? null;

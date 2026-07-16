@@ -1,5 +1,5 @@
 import { corsJson, corsOptions } from "../../lib/cors";
-import { findUser } from "../../lib/db";
+import { createAuthToken, findUser } from "../../lib/db";
 
 export async function OPTIONS(request) {
   return corsOptions(request);
@@ -19,7 +19,9 @@ export async function POST(request) {
       return corsJson(request, { message: "用户名或密码错误" }, { status: 401 });
     }
 
-    return corsJson(request, { ok: true, username: user.username });
+    const token = await createAuthToken(user.username);
+
+    return corsJson(request, { ok: true, username: user.username, token });
   } catch (error) {
     return corsJson(request, { message: error.message || "登录接口异常" }, { status: 500 });
   }
