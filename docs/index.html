@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Pages 前端 Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="card">
+        <p class="eyebrow">GitHub Pages 前端</p>
+        <h1 id="title">登录</h1>
+        <p class="description">
+          这个页面部署在 GitHub Pages，通过 HTTP 请求调用 Vercel 后端 API，并把数据保存到 Neon 数据库。
+        </p>
+
+        <div id="auth-area">
+          <div class="tabs">
+            <button class="tab active" id="login-tab" type="button">登录</button>
+            <button class="tab" id="register-tab" type="button">注册</button>
+          </div>
+
+          <form class="form" id="auth-form">
+            <label>
+              账号
+              <input id="username" value="admin" autocomplete="username" />
+            </label>
+            <label>
+              密码
+              <input id="password" type="password" value="admin" autocomplete="current-password" />
+            </label>
+            <button id="auth-submit" type="submit">登录</button>
+          </form>
+        </div>
+
+        <div id="content-area" class="hidden">
+          <p class="signed-in">当前用户：<span id="current-user"></span></p>
+          <form class="form" id="content-form">
+            <label>
+              内容
+              <input id="content-input" placeholder="请输入要保存的内容" />
+            </label>
+            <button type="submit">保存</button>
+          </form>
+        </div>
+
+        <p class="message hidden" id="message"></p>
+      </section>
+
+      <section class="card list-card">
+        <div class="list-header">
+          <div>
+            <p class="eyebrow">内容列表</p>
+            <h2>所有输入过的内容</h2>
+          </div>
+          <button class="secondary-button" id="refresh-button" type="button">刷新</button>
+        </div>
+        <div class="content-list" id="content-list"></div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

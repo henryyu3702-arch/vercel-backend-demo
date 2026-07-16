@@ -91,3 +91,32 @@ https://henryyu3702-arch.github.io
 ```
 
 添加或修改环境变量后，需要在 Vercel 中重新部署一次。
+
+## GitHub Pages 静态前端
+
+`docs/` 目录是一个纯静态前端，可以部署到 GitHub Pages：
+
+- `docs/index.html`
+- `docs/styles.css`
+- `docs/app.js`
+
+前端通过 `docs/app.js` 中的 `API_BASE_URL` 调用 Vercel 后端 API：
+
+```js
+const API_BASE_URL = "https://vercel-backend-demo-fx1cd0uka-henryyu3702-archs-projects.vercel.app";
+```
+
+发布 GitHub Pages：
+
+1. 打开 GitHub 仓库 `vercel-backend-demo`。
+2. 进入 `Settings` → `Pages`。
+3. `Source` 选择 `Deploy from a branch`。
+4. `Branch` 选择 `main`。
+5. 目录选择 `/docs`。
+6. 保存后等待 GitHub Pages 部署完成。
+
+部署完成后，前端地址通常是：
+
+```text
+https://henryyu3702-arch.github.io/vercel-backend-demo/
+```
