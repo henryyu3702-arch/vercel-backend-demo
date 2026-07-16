@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@vercel/postgres": "latest",
-    "better-sqlite3": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
