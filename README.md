@@ -52,7 +52,9 @@ vercel --prod
 
 保存内容时会自动记录作者字段 `author`。如果旧表没有 `author` 字段，程序会自动补充该字段。
 
-登录 token 会保存到数据库的 `auth_tokens` 表。保存内容时，前端需要在请求头里携带：
+用户密码会以 PBKDF2-SHA256 哈希形式保存在 `users.password_hash` 字段中。旧的明文密码用户首次登录成功后，会自动迁移为哈希密码。
+
+登录 token 会保存到数据库的 `auth_tokens` 表，并设置 7 天过期时间。保存内容时，前端需要在请求头里携带：
 
 ```text
 Authorization: Bearer <token>
