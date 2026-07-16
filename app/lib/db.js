@@ -1,7 +1,15 @@
-import { sql } from "@vercel/postgres";
-
-const isVercelPostgresAvailable = Boolean(process.env.POSTGRES_URL);
+const databaseUrl = process.env.POSTGRES_URL || process.env.STORAGE_URL;
+const isVercelPostgresAvailable = Boolean(databaseUrl);
 const memoryContent = [];
+
+async function getSql() {
+  if (!process.env.POSTGRES_URL && process.env.STORAGE_URL) {
+    process.env.POSTGRES_URL = process.env.STORAGE_URL;
+  }
+
+  const { sql } = await import("@vercel/postgres");
+  return sql;
+}
 
 function getDemoUser(username, password) {
   if (username === "admin" && password === "admin") {
@@ -19,6 +27,8 @@ export async function findUser(username, password) {
   }
 
   if (isVercelPostgresAvailable) {
+    const sql = await getSql();
+
     await sql`
       CREATE TABLE IF NOT EXISTS users (
         username TEXT PRIMARY KEY,
@@ -52,6 +62,8 @@ export async function saveContent(text) {
   }
 
   if (isVercelPostgresAvailable) {
+    const sql = await getSql();
+
     await sql`
       CREATE TABLE IF NOT EXISTS content (
         id SERIAL PRIMARY KEY,
