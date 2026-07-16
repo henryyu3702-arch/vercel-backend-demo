@@ -60,3 +60,34 @@ Vercel 线上推荐添加 Vercel Postgres：
 5. 重新部署项目。
 
 连接 Postgres 后，接口会自动创建 `users` 和 `content` 表。
+
+## 前后端分离时的 CORS
+
+如果前端部署在 GitHub Pages，后端 API 部署在 Vercel，需要允许跨域请求。
+
+本项目的 API 已经支持 CORS：
+
+- `POST /api/login`
+- `POST /api/register`
+- `GET /api/content`
+- `POST /api/content`
+
+推荐在 Vercel 项目的 `Settings` → `Environment Variables` 中添加：
+
+```text
+FRONTEND_ORIGIN=https://henryyu3702-arch.github.io
+```
+
+如果你的 GitHub Pages 地址带仓库名，例如：
+
+```text
+https://henryyu3702-arch.github.io/vercel-frontend-demo
+```
+
+`FRONTEND_ORIGIN` 仍然只填写来源部分：
+
+```text
+https://henryyu3702-arch.github.io
+```
+
+添加或修改环境变量后，需要在 Vercel 中重新部署一次。
