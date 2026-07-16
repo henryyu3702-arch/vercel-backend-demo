@@ -1,11 +1,15 @@
-const databaseUrl = process.env.POSTGRES_URL || process.env.STORAGE_URL;
+const databaseUrl =
+  process.env.POSTGRES_URL ||
+  process.env.STORAGE_URL ||
+  process.env.STORAGE_POSTGRES_URL ||
+  process.env.DATABASE_URL;
 const isVercelPostgresAvailable = Boolean(databaseUrl);
 const memoryUsers = [{ username: "admin", password: "admin" }];
 const memoryContent = [];
 
 async function getSql() {
-  if (!process.env.POSTGRES_URL && process.env.STORAGE_URL) {
-    process.env.POSTGRES_URL = process.env.STORAGE_URL;
+  if (!process.env.POSTGRES_URL && databaseUrl) {
+    process.env.POSTGRES_URL = databaseUrl;
   }
 
   const { sql } = await import("@vercel/postgres");
