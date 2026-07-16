@@ -51,6 +51,28 @@ h1 {
   gap: 18px;
 }
 
+.tabs {
+  background: #eef2ff;
+  border-radius: 14px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 20px;
+  padding: 6px;
+}
+
+.tab {
+  background: transparent;
+  color: #526071;
+  padding: 10px;
+}
+
+.tab.active {
+  background: #ffffff;
+  color: #1d4ed8;
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.12);
+}
+
 label {
   color: #344154;
   display: grid;
@@ -94,4 +116,56 @@ button:disabled {
   color: #1e40af;
   margin: 20px 0 0;
   padding: 12px 14px;
+}
+
+.signed-in {
+  background: #ecfdf5;
+  border-radius: 12px;
+  color: #047857;
+  font-weight: 700;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+}
+
+.link-button {
+  border: 1px solid #d6dce8;
+  border-radius: 14px;
+  color: #2563eb;
+  display: block;
+  font-weight: 700;
+  margin-top: 18px;
+  padding: 13px 16px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.list-shell {
+  align-items: flex-start;
+}
+
+.list-card {
+  max-width: 760px;
+}
+
+.content-list {
+  display: grid;
+  gap: 14px;
+}
+
+.content-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.content-text {
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 0 0 10px;
+}
+
+.content-meta,
+.empty {
+  color: #64748b;
+  margin: 0;
 }
