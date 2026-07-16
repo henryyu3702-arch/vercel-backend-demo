@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://vercel-backend-demo-fx1cd0uka-henryyu3702-archs-projects.vercel.app";
+const API_BASE_URL = "https://vercel-backend-demo.vercel.app";
 
 let mode = "login";
 let currentUser = "";

@@ -103,7 +103,7 @@ https://henryyu3702-arch.github.io
 前端通过 `docs/app.js` 中的 `API_BASE_URL` 调用 Vercel 后端 API：
 
 ```js
-const API_BASE_URL = "https://vercel-backend-demo-fx1cd0uka-henryyu3702-archs-projects.vercel.app";
+const API_BASE_URL = "https://vercel-backend-demo.vercel.app";
 ```
 
 发布 GitHub Pages：
